@@ -7,30 +7,11 @@ MuseScore {
       description: "Create L-System score."
       menuPath: "Plugins.random"
 
-      //function addNote(key, cursor) {
-            /*
-            
-            var cdur = [ 0, 2, 4, 5, 7, 9, 11 ];
-            //           c  d  e  g  a
-            var keyo = [ 0, 2, 4, 7, 9 ];
-
-            var idx    = Math.random() * 6;//get num 0-4
-            var octave =  Math.floor(Math.random() * 2); // get 0 or 1
-            //the MIDI pitch of the note (in the range 0-127).
-            //var pitch  = cdur[Math.floor(idx)] + octave * 12 + 60;
-            var pitch = cdur[key] + octave * 12 + 60;//set to mid range
-            var currentPitch  = pitch + keyo[key];
-            cursor.addNote(currentPitch);
-            */
-
-        //    }
-
-
       // Interpret an L-system
       function lindenmayer(s, therules) {
             var outputstring = ''; // start a blank output string
 
-       // iterate through 'therules' looking for symbol matches:
+            // iterate through 'therules' looking for symbol matches:
             for (var i = 0; i < s.length; i++) {
                   var ismatch = 0; // by default, no match
                   for (var j = 0; j < therules.length; j++) {
@@ -40,7 +21,7 @@ MuseScore {
                         break; // get out if the for() loop
                   }
             }
-    // if nothing matches, just copy the symbol over.
+            // if nothing matches, just copy the symbol over.
             if (ismatch == 0) outputstring+= s[i];
             }
 
@@ -74,7 +55,7 @@ MuseScore {
             var thestring = 'F'; // "axiom" or start of the string
             var numloops = 3; // how many iterations to pre-compute
             var therules = []; // array for rules
-            therules[0] = ['F', 'F+F-F-F+F']; // first rule
+            therules[0] = ['F', 'F+F-F-F+F']; // first rule, based on Koch Curve
             var whereinstring = 0; // where in the L-system are we?
 
             //Score Setup
@@ -104,7 +85,7 @@ MuseScore {
                   console.log(thestring); //debug F output  
             }
 
-            //write out the generated melody
+            //Write out the generated melody
             for(var n=0; n < 88; n++) {
                  
                   var k = thestring[whereinstring];
