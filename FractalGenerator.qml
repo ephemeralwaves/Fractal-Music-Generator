@@ -105,8 +105,8 @@ MuseScore {
             var measures    = 38;
             var numerator   = 3;
             var denominator = 4;
-            var notes = [55,57,60,62,64,67,69,72,74,76,79,81,84,86,88]//pentatonic C scale
-            var currentPitch = 7;//setting where to start in note array
+            var notes = [24,26,28,31,33,36,38,40,43,45,48,50,52,55,57,60,62,64,67,69,72,74,76,79,81,84,86,88,91,93,96,98,100,103,105,108]//pentatonic C scale
+            var currentPitch = 20;//setting where to start in note array
                   
             // Initializing a L-System that produces the Koch-curve
             var thestring = 'F'; // "axiom" or start of the string
