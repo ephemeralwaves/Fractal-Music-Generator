@@ -1,9 +1,10 @@
-import QtQuick 2.1
-import MuseScore 1.0
+import QtQuick 2.2
+import MuseScore 3.0
+
 
 MuseScore {
 
-      version:  "2.0"
+      version: "3.0.2"
       description: "Create L-System score."
       menuPath: "Plugins.random"
 
@@ -54,10 +55,10 @@ MuseScore {
 
     //adds chord at current position. chord_notes is an array with pitch of notes.
       function addChord(cursor, chord_notes, duration){ 
-            if(chord_notes.length==0) return -1;
-       
+            if(chord_notes.length==0) return -1; 
+   
             var cur_time=cursor.tick;
-            cursor.setDuration(1, duration);
+            cursor.setDuration(1, duration); //numerator, denominator (if denominator==0, sets duration to a quarter)
             cursor.addNote(chord_notes[0]); //add 1st note
             var next_time=cursor.tick;
             setCursorToTime(cursor, cur_time); //rewind to this note
@@ -95,8 +96,10 @@ MuseScore {
                   note.tpc1 = pitch2tpc[pitch_mod12];
                   note.tpc2 = pitch2tpc[pitch_mod12];
             }
+           // if (head) note.headType = head; 
+           // else note.headType = NoteHead.HEAD_AUTO;
             if (head) note.headType = head; 
-            else note.headType = NoteHead.HEAD_AUTO;
+            else note.headType = NoteHeadType.HEAD_AUTO;
             // console.log("  created note with tpc: ",note.tpc1," ",note.tpc2," pitch: ",note.pitch);
             return note;
       }
@@ -126,7 +129,10 @@ MuseScore {
             cursor.rewind(0);
 
             var ts = newElement(Element.TIMESIG);
-            ts.setSig(numerator, denominator);
+           // v1 settings
+           //ts.setSig(numerator, denominator);
+           //v3 update
+            ts.timesig = fraction(numerator, denominator) 
             cursor.add(ts);
 
             cursor.rewind(0);
@@ -170,18 +176,23 @@ MuseScore {
 
            // Generate notes for other staff
            var staff = 1
-           cursor.track = staff * 4;
+           cursor.track = staff *4;
            cursor.setDuration(1, 2);
            var nMeasures= (score.nmeasures)/2;
 
            cursor.rewind(0); //go to the start of the score
-            for(var n=0; n < nMeasures; n++) {
-                  addChord(cursor, [n2p('C',3), n2p('G',3)], 1);
-                  cursor.next();
-                  addChord(cursor, [n2p('A',2), n2p('E',3)], 1);
-                  cursor.next();
-            }
-
+           
+             //first chord for 1 full measure
+            addChord(cursor, [n2p('C',3), n2p('G',3)], 2);
+            cursor.next();
+            //rest of the chords, back and forth
+             for(var n=0; n < nMeasures-1; n++) {
+                 addChord(cursor, [n2p('A',2), n2p('E',3)],1);
+                 addChord(cursor, [n2p('A',2), n2p('E',3)],2);
+                 addChord(cursor, [n2p('C',3), n2p('G',3)], 1);
+                 addChord(cursor, [n2p('C',3), n2p('G',3)], 2);
+               }
+                 addChord(cursor, [n2p('A',2), n2p('E',3)],2);
             Qt.quit();
       }
 }
